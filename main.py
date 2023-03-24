@@ -5,9 +5,6 @@ from tensorflow import keras
 import tensorflow as tf
 
 
-# import tensorflow.keras.backend as K
-
-
 def interface():
     size_window = 476
     sc = pg.display.set_mode((size_window, size_window))
@@ -18,7 +15,7 @@ def interface():
     fldraw = False
     x, y = 0, 0
     result = []
-    model = keras.models.load_model("model_128_32")
+    model = keras.models.load_model("Model_ex_256")
 
     while flruning:
         for event in pg.event.get():
@@ -41,17 +38,19 @@ def interface():
                         temp = size_window // 28
                         for i in range(0, size_window, temp):
                             for j in range(0, size_window, temp):
-                                summ = 0
-                                for i1 in range(i, i + temp):
-                                    for j2 in range(j, j + temp):
-                                        summ += x3[i1][j2][0] / 255
-                                result.append(summ / 289)
+                                # summ = 0
+                                #
+                                # for i1 in range(i, i + temp):
+                                #     for j2 in range(j, j + temp):
+                                #         summ += x3[i1][j2][0] / 255
+                                summ = x3[i][j][0] / 255
+                                result.append(summ)
 
                         result = np.ndarray((28, 28), buffer=np.array(result[::-1]),
                                             dtype=float)
                         result = np.rot90(result, k=1, axes=(0, 1))
                         result = np.fliplr(result)
-                        result = tf.reshape(tf.cast(result, tf.float32), [1,28,28,1])
+                        result = tf.reshape(tf.cast(result, tf.float32), [1,28, 28, 1])
                         res = model(result)
 
                         for i in range(len(res[0])):
@@ -64,7 +63,7 @@ def interface():
                         pg.display.update(update_sc)
 
         if fldraw:
-            circle1 = pg.draw.circle(sc, (255, 255, 255), (x, y), size_window * 0.03)
+            circle1 = pg.draw.circle(sc, (255, 255, 255), (x, y), size_window * 0.036)
             pg.display.update(circle1)
         clock.tick(120)
 
