@@ -17,7 +17,7 @@ def interface():
     fldraw = False
     x, y = 0, 0
     result = []
-    model = keras.models.load_model("Model_CNN_128_10")
+    model = keras.models.load_model("Model_CNN_ex_128_10")
 
     while flruning:
         for event in pg.event.get():
