@@ -1,19 +1,39 @@
 import pygame as pg
 import numpy as np
-import matplotlib.pyplot as plt
 from tensorflow import keras
 import tensorflow as tf
+import pygame_menu
 
 
 class Interface:
-    def __init__(self, size_window=476, model="Model_CNN_ex_128_10", fl_ci=True):
+
+    def search(self):
+        """
+        Функция ищет все файлы с названием "Model"
+        и записывает все подходящие файлы в переменую self.models : [str]
+        :return: None
+        """
+        pass
+
+    def __init__(self, size_window=448, model="Model_CNN_ex_128_10", fl_ci=True):
+        pg.init()
+        self.search()
+        """
+        :param size_window: размер окна
+        :param model: название модели(путь к ней)
+        :param fl_ci: True - это рисовать кругами,False - это рисовать квадратами
+        (это не будет влиять на результат)
+        """
+
         self.fl_ci = fl_ci
         self.model = keras.models.load_model(model)
         self.size_window = size_window
         self.sc = pg.display.set_mode((size_window, size_window))
         pg.display.set_caption("Neural Network Interface")
+        # self.menu =
 
     def __call__(self):
+        # self.menu.mainloop(self.sc)
         clock = pg.time.Clock()
         fl_draw = False
         sw = self.size_window
