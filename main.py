@@ -99,7 +99,7 @@ class Interface:
                                     self.model = keras.models.load_model(self.models[n])
                                     break
                                 except:
-                                    print("Ты оладушек")
+                                    print("Ты оладушек ")
 
             if fl_draw and x < self.size_window-15:
                 circle1 = pg.draw.circle(self.sc, (255, 255, 255), (x, y), sw * 0.036)
