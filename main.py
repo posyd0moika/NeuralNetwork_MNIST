@@ -58,8 +58,9 @@ class Interface:
             for num, mod in enumerate(self.models, start=1)
         ]
 
-        self.borders = [
+        borders = [
             (
+                mod,
                 (448 // 6, step_model * num),
                 (448 // 6 + len(mod) * 18, step_model * num + 38)
             )
@@ -76,7 +77,7 @@ class Interface:
                         sys.exit()
                     case pg.MOUSEMOTION:
                         x, y = event.pos
-                        print(x, y)
+                        # print(x, y)
                     case pg.MOUSEBUTTONDOWN:
                         fl_draw = True
                     case pg.MOUSEBUTTONUP:
@@ -145,7 +146,20 @@ class Interface:
                 fl_draw = False
 
             if fl_menu is True:
-                pass
+                """
+                Логика если мы находимя в меню и выбираем что-то из меню
+                """
+                for name,(x1,y1),(x2,y2) in borders:
+                    if x1 <= x <= x2 and y1 <= y <= y2 and fl_draw:
+                        self.model_name = name
+                        act_model = (
+                            f2.render(self.model_name, True, (50, 50, 50)),
+                            self.model_name,
+                            (0, 0))
+                        self.update(sw,activate_model=act_model,text=text_menu)
+                        self.model = keras.models.load_model(self.model_name)
+
+
         clock.tick(120)
 
     def update(self, sw, text=None, text_models=None, menu=True, activate_model=None):
@@ -180,8 +194,8 @@ class Interface:
             """
             mod, name, (x, y) = activate_model
             pg.draw.rect(self.sc,
-                         (255, 0, 0),
-                         (x, y, x + len(name) * 15, 38)
+                         (255, 255, 255),
+                         (x, y, 448,y+ 38)
                          )
 
             self.sc.blit(mod, (x, y))
