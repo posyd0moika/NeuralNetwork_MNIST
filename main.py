@@ -40,7 +40,6 @@ class Interface:
 
         f = pg.font.SysFont('arial', 50)
         text_menu = f.render("M", True, (255, 255, 255))
-
         self.update(sw, text_menu)
 
         while True:
