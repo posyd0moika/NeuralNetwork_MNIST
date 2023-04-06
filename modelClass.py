@@ -24,10 +24,12 @@ class Model:
                 f"File {new_path} not found in immediate environment"
             )
 
-    def __call__(self, imag: np.array, fl_print: bool = False) -> np.array:
+    def __call__(self, imag: np.array, fl_print: bool = False, fl_imgs: bool = False) -> np.array:
         """
 
         :param imag: np.array ,shape = (448,448)
+        :param fl_imgs : bool если True то мы imag используем как готовый вариат (1,28,28,1)
+
         :param fl_print:
             if fl_print:
                 n = np.argmax(self.result_models)
@@ -35,16 +37,16 @@ class Model:
 
         :return:result models : np.array, shape = (1,10)
         """
-        imag.shape = (1, 448, 448, 1)
+        if fl_imgs is False:
+            imag.shape = (1, 448, 448, 1)
+            imag = np.array(self.pool(imag))
 
-        pool_imag = np.array(self.pool(imag))
-
-        self.result_models = self.model(pool_imag)
+        self.result_models = self.model(imag)
         if fl_print:
             n = np.argmax(self.result_models)
             print(f"Result: {n}\nConfidence:{self.result_models[0][n]}")
 
-        return self.result_models, pool_imag
+        return self.result_models, imag
 
     def search(self, fl_return: bool = False):
         """

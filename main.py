@@ -12,6 +12,7 @@ class Interface:
         self.sc = pg.display.set_mode((448 + 60, 448))
         pg.display.set_caption("Neural Network Interface")
         self.size_window = 448
+        self.save_result = False
 
         self.model = Model(model_name)
         self.menu = Menu(self.sc, self.size_window)
@@ -49,23 +50,22 @@ class Interface:
                     case pg.MOUSEBUTTONUP:
                         fl_draw = False
 
-                    case pg.KEYDOWN if event.key == pg.K_TAB and fl_menu is False:
-                        x3 = pg.surfarray.pixels3d(self.sc)
-                        x3 = np.array(x3)[0:448, :, 0].T / 255
-                        result, img = self.model(x3)
-
+                    case pg.KEYDOWN if event.key == pg.K_1 and fl_menu is False and self.save_result is not False:
+                        self.menu.result = self.save_result
                         for j in range(28):
                             for i in range(28):
-                                col = img[0][i][j][0] * 255
+                                col = self.save_img[0][i][j][0] * 255
                                 pg.draw.rect(self.sc,
                                              (col, col, col),
-                                             (j * 16, i * 16,
-                                              j * 16 + 16, i * 16 + 16
-                                              )
+                                             (
+                                                 j * 16, i * 16,
+                                                 j * 16 + 16, i * 16 + 16
+                                             )
                                              )
 
-                        self.menu.result = result
-                        self.menu.update()
+
+                    case pg.KEYDOWN if event.key == pg.K_TAB and fl_menu is False:
+                        self.update_result(paint=False, fl_save=True)
 
                     case pg.KEYDOWN if event.key == pg.K_CAPSLOCK and fl_menu is False:
                         update_sc = pg.draw.rect(self.sc, (0, 0, 0),
@@ -93,8 +93,36 @@ class Interface:
 
             if fl_menu is True:
                 self.menu.choise_model(x, y, fl_draw, self.model)
+            else:
+                self.update_result()
 
         clock.tick(120)
+
+    def update_result(self, paint: bool = True,fl_save: bool=False):
+        img = pg.surfarray.pixels3d(self.sc)
+        img = np.array(img)[0:448, :, 0].T / 255
+        result, img = self.model(img)
+
+        if fl_save:
+            self.save_img = img
+            self.save_result = result
+
+        if paint is True:
+            for j in range(28):
+                for i in range(28):
+                    col = img[0][i][j][0] * 255
+                    pg.draw.rect(self.sc,
+                                 (col, col, col),
+                                 (
+                                     j * 16, i * 16,
+                                     j * 16 + 16, i * 16 + 16
+                                 )
+                                 )
+
+        self.menu.result = result
+        self.menu.update()
+
+
 
 
 if __name__ == '__main__':
