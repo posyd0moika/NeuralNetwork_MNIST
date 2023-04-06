@@ -58,7 +58,7 @@ class Model:
             else:
                 :return None
         """
-        self.models = sorted([i for i in listdir() if "Model" in i])
+        self.models = [i for i in listdir() if "Model" in i]
 
         return self.models if fl_return is True else None
 

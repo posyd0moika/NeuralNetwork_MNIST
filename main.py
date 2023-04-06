@@ -24,7 +24,7 @@ class Interface:
         sw = self.size_window
         x, y = 0, 0
 
-        step = sw // len(self.model)
+        step = sw // (len(self.model) + 1)
         self.menu.menu_borden(
             str(self.model),
             self.model.models,
@@ -139,5 +139,5 @@ class Interface:
 
 
 if __name__ == '__main__':
-    inter = Interface()
+    inter = Interface(model_name=None)
     inter.main_loop()
