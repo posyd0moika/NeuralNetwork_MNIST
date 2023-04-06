@@ -6,6 +6,8 @@ import sys
 from time import time
 
 
+
+
 class Interface:
 
     def search(self):
@@ -15,8 +17,6 @@ class Interface:
         :return: None
         """
         self.models = [i for i in listdir() if "Model" in i]
-        for i in range(2):
-            self.models.append(f"Model_{i}")
 
     def __init__(self, model_name="Model_CNN_ex_128_10"):
         """
@@ -29,6 +29,7 @@ class Interface:
         self.search()
 
         self.size_window = 448
+        self.cord_res = [(452, i * 40 + 20) for i in range(1, 11)]
 
         self.model = keras.models.load_model(model_name)
         self.pool = keras.models.load_model("Pool")
@@ -44,6 +45,11 @@ class Interface:
         f2 = pg.font.SysFont('arial', 30)
         text_menu = f.render("M", True, (255, 255, 255))
         step_model = sw // len(self.models)
+
+        result_models = np.array(
+            [[0 for i in range(10)]]
+        )
+
         act_model = (
             f2.render(self.model_name, True, (50, 50, 50)),
             self.model_name,
@@ -73,15 +79,20 @@ class Interface:
             for event in pg.event.get():
 
                 match event.type:
+
                     case pg.QUIT:
                         sys.exit()
+
                     case pg.MOUSEMOTION:
                         x, y = event.pos
                         # print(x, y)
+
                     case pg.MOUSEBUTTONDOWN:
                         fl_draw = True
+
                     case pg.MOUSEBUTTONUP:
                         fl_draw = False
+
                     case pg.KEYDOWN if event.key == pg.K_TAB and fl_menu is False:
                         x3 = pg.surfarray.pixels3d(self.sc)
                         print(len(x3[0]))
@@ -94,9 +105,9 @@ class Interface:
 
                         # draw_see_model = []
 
-                        res = self.model(result)
-                        n = np.argmax(res)
-                        print(f"Result: {n}\nConfidence:{res[0][n]}")
+                        result_models = self.model(result)
+                        n = np.argmax(result_models)
+                        print(f"Result: {n}\nConfidence:{result_models[0][n]}")
 
                         for j in range(28):
                             for i in range(28):
@@ -105,9 +116,9 @@ class Interface:
                                                     (col, col, col),
                                                     (j * 16, i * 16,
                                                      j * 16 + 16, i * 16 + 16))
-                                # draw_see_model.append(rect)
 
-                        self.update(sw, text_menu)
+                        self.update(sw, text_menu,res_model=result_models)
+                        # self.draw_result_models(f2,result_models)
 
                     case pg.KEYDOWN if event.key == pg.K_CAPSLOCK and fl_menu is False:
                         update_sc = pg.draw.rect(self.sc, (0, 0, 0),
@@ -149,20 +160,20 @@ class Interface:
                 """
                 Логика если мы находимя в меню и выбираем что-то из меню
                 """
-                for name,(x1,y1),(x2,y2) in borders:
+                for name, (x1, y1), (x2, y2) in borders:
                     if x1 <= x <= x2 and y1 <= y <= y2 and fl_draw:
                         self.model_name = name
                         act_model = (
                             f2.render(self.model_name, True, (50, 50, 50)),
                             self.model_name,
                             (0, 0))
-                        self.update(sw,activate_model=act_model,text=text_menu)
+                        self.update(sw, activate_model=act_model, text=text_menu)
                         self.model = keras.models.load_model(self.model_name)
-
+            # self.update(sw, text_menu, res_model=result_models)
 
         clock.tick(120)
 
-    def update(self, sw, text=None, text_models=None, menu=True, activate_model=None):
+    def update(self, sw, text=None, text_models=None, menu=True, activate_model=None, res_model = None):
         """Обновляет главное меню(создает его)
         так же отвечает за прорисовку как видит рисунок модель"""
 
@@ -174,16 +185,14 @@ class Interface:
         if text:
             self.sc.blit(text, (sw + 9, -10))
 
+        if res_model is not None:
+            f = pg.font.SysFont('arial', 20)
+            self.draw_result_models(f,res_model)
+
         if text_models:
             """
             x,y = x,y 
             x2,y2 = x + len()* 18,y + 38"""
-            for mod, name, (x, y) in text_models:
-                pg.draw.rect(self.sc,
-                             (255, 0, 0),
-                             (x, y, x + len(name) * 14, 38)
-                             )
-                print(x, y, x + 14 * len(name), y + 38)
             for mod, name, (x, y) in text_models:
                 self.sc.blit(mod, (x, y))
 
@@ -195,15 +204,22 @@ class Interface:
             mod, name, (x, y) = activate_model
             pg.draw.rect(self.sc,
                          (255, 255, 255),
-                         (x, y, 448,y+ 38)
+                         (x, y, 448, y + 38)
                          )
 
             self.sc.blit(mod, (x, y))
 
         pg.display.update()
 
-    def draw_result(self):
-        """Отрисовывает результат нейронной сети"""
+    def draw_result_models(self, f, res: np.array):
+        n = np.argmax(res)
+        for i in range(10):
+            x, y = self.cord_res[i]
+            if n == i:
+                temp = f.render(f"{i}-{round(float(res[0][i]), 2)}", True, (255, 0, 0))
+            else:
+                temp = f.render(f"{i}-{round(float(res[0][i]),2)}", True, (255, 255, 255))
+            self.sc.blit(temp, (x, y))
 
 
 if __name__ == '__main__':
