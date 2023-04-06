@@ -12,7 +12,6 @@ class Model:
     def update_model_path(self, new_path: str):
         self.search()
         if new_path in self.models:
-            print(new_path)
             self.model = load_model(new_path)
             self.path = new_path
         elif new_path is None:
