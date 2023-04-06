@@ -79,6 +79,8 @@ class Interface:
 
             elif fl_draw and 455 <= x <= 510 and 0 <= y <= 40:
                 col_menu = (255, 255, 255) if fl_menu is False else (0, 0, 0)
+                if fl_menu is False:
+                    self.update_result(paint=False, fl_save=True)
 
                 pg.draw.rect(self.sc, col_menu,
                              (0, 0, sw, sw),
@@ -86,6 +88,17 @@ class Interface:
                 if fl_menu is False:
                     self.menu.update(menu=False, text_models=True, activate_model=True)
                 else:
+                    self.menu.result = self.save_result
+                    for j in range(28):
+                        for i in range(28):
+                            col = self.save_img[0][i][j][0] * 255
+                            pg.draw.rect(self.sc,
+                                         (col, col, col),
+                                         (
+                                             j * 16, i * 16,
+                                             j * 16 + 16, i * 16 + 16
+                                         )
+                                         )
                     self.menu.update(menu=False)
 
                 fl_menu = not fl_menu
