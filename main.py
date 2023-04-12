@@ -23,6 +23,7 @@ class Interface:
         fl_menu = False
         sw = self.size_window
         x, y = 0, 0
+        color_pait = (255, 255, 255)
 
         step = sw // (len(self.model) + 1)
         self.menu.menu_borden(
@@ -63,7 +64,6 @@ class Interface:
                                              )
                                              )
 
-
                     case pg.KEYDOWN if event.key == pg.K_TAB and fl_menu is False:
                         self.update_result(paint=False, fl_save=True)
 
@@ -73,8 +73,11 @@ class Interface:
                                                  sw)
                         pg.display.update(update_sc)
 
+                    case pg.KEYDOWN if event.key == pg.K_2 and fl_menu is False:
+                        color_pait = (0, 0, 0) if color_pait == (255, 255, 255) else (255, 255, 255)
+
             if fl_draw and x < sw - 15 and not fl_menu:
-                circle1 = pg.draw.circle(self.sc, (255, 255, 255), (x, y), sw * 0.036)
+                circle1 = pg.draw.circle(self.sc, color_pait, (x, y), sw * 0.036)
                 pg.display.update(circle1)
 
             elif fl_draw and 455 <= x <= 510 and 0 <= y <= 40:
@@ -111,7 +114,7 @@ class Interface:
 
         clock.tick(120)
 
-    def update_result(self, paint: bool = True,fl_save: bool=False):
+    def update_result(self, paint: bool = True, fl_save: bool = False):
         img = pg.surfarray.pixels3d(self.sc)
         img = np.array(img)[0:448, :, 0].T / 255
         result, img = self.model(img)
@@ -134,8 +137,6 @@ class Interface:
 
         self.menu.result = result
         self.menu.update()
-
-
 
 
 if __name__ == '__main__':
