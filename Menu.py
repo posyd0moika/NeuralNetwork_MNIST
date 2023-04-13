@@ -1,5 +1,5 @@
 import pygame as pg
-import numpy as np
+from numpy import argmax,array
 from modelClass import Model
 
 
@@ -19,7 +19,7 @@ class Menu:
         self.f3 = pg.font.SysFont('arial', 20)
 
         self.text_menu = self.f1.render("M", True, (255, 255, 255))
-        self.result = np.array(
+        self.result = array(
             [[0 for i in range(10)]]
         )
 
@@ -95,7 +95,7 @@ class Menu:
 
     def draw_result_models(self):
         res = self.result
-        n = np.argmax(res)
+        n = argmax(res)
         for i in range(10):
             x, y = self.cord_res[i]
             if n == i:

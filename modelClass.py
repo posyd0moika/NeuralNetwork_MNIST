@@ -1,5 +1,5 @@
 from tensorflow.keras.models import load_model
-import numpy as np
+from numpy import array,argmax
 from os import listdir
 
 
@@ -24,7 +24,7 @@ class Model:
                 f"File {new_path} not found in immediate environment"
             )
 
-    def __call__(self, imag: np.array, fl_print: bool = False, fl_imgs: bool = False) -> np.array:
+    def __call__(self, imag: array, fl_print: bool = False, fl_imgs: bool = False) -> array:
         """
 
         :param imag: np.array ,shape = (448,448)
@@ -39,11 +39,11 @@ class Model:
         """
         if fl_imgs is False:
             imag.shape = (1, 448, 448, 1)
-            imag = np.array(self.pool(imag))
+            imag = array(self.pool(imag))
 
         self.result_models = self.model(imag)
         if fl_print:
-            n = np.argmax(self.result_models)
+            n = argmax(self.result_models)
             print(f"Result: {n}\nConfidence:{self.result_models[0][n]}")
 
         return self.result_models, imag

@@ -116,7 +116,7 @@ class Interface:
 
     def update_result(self, paint: bool = True, fl_save: bool = False):
         img = pg.surfarray.pixels3d(self.sc)
-        img = np.array(img)[0:448, :, 0].T / 255
+        img = array(img)[0:448, :, 0].T / 255
         result, img = self.model(img)
 
         if fl_save:
