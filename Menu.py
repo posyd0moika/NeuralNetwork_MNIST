@@ -1,5 +1,5 @@
 import pygame as pg
-from numpy import argmax,array
+from numpy import argmax, array
 from modelClass import Model
 
 
@@ -37,14 +37,14 @@ class Menu:
             (
                 self.f2.render(mod, True, (100, 100, 100)),
                 mod,
-                (448 // 6, step * num )
+                (448 // 6, step * num)
             )
             for num, mod in enumerate(models, start=1)
         ]
         self.borders = [
             (
                 mod,
-                (448 // 6, step * num ),
+                (448 // 6, step * num),
                 (448 // 6 + len(mod) * 18, step * num + 38)
             )
             for num, mod in enumerate(models, start=1)

@@ -1,5 +1,5 @@
 from tensorflow.keras.models import load_model
-from numpy import array,argmax
+from numpy import array, argmax
 from os import listdir
 
 
