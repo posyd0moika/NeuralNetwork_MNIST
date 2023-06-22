@@ -8,10 +8,15 @@ keras_CNN/(Dense) - код и объяснения что, зачем и как 
 
 Файлы которые начинаются на "Model" - это примеры обученых сетей, "ep" - эпохи, "ex" - обучена на увеличенной базе данных.
 "Pool" - это 1 слой AvgPool, который сжимает 448х448 до 28х28
+
 # Программа для визуализации
 main - это файл от куда запускается программа, Menu/modelClass - это вспомогательные модули для main
 https://disk.yandex.ru/d/5XWjU-mfO_JPlQ - ссылка на exe файл этой программы.
 Вся информация как пользоваться программой представлена в файле "Руководство по программе"
+<img width="506" alt="Screenshot 2023-06-22 at 19 35 03" src="https://github.com/posyd0moika/NeuralNetwork_MNIST/assets/94396766/3e3977db-a3b3-4a0a-aa39-b191bb58460c">
+<img width="511" alt="Screenshot 2023-06-22 at 19 35 11" src="https://github.com/posyd0moika/NeuralNetwork_MNIST/assets/94396766/911f5f94-fc81-4b35-9784-42ea34f6b769">
+
+
 
 # Kaggle
 Kaggle - в это директории, есть дополнительная обучающая выборка, а также пример что нужно записать в данные для участия в соревнованиях Kaggle (https://www.kaggle.com/competitions/digit-recognizer/overview)\
