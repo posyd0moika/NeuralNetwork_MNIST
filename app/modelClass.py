@@ -7,7 +7,7 @@ class Model:
     def __init__(self, path=None):
 
         self.update_model_path(path)
-        self.pool = load_model("Pool")
+        self.pool = load_model("Models/Pool")
 
     def update_model_path(self, new_path: str):
         self.search()
@@ -49,6 +49,7 @@ class Model:
         return self.result_models, imag
 
     def search(self, fl_return: bool = False):
+
         """
         Функция ищет все файлы с названием "Model"
         и записывает все подходящие файлы в переменую self.models : [str]
@@ -58,7 +59,8 @@ class Model:
             else:
                 :return None
         """
-        self.models = [i for i in listdir() if "Model" in i]
+        # print(listdir(path="./Models"))
+        self.models = ["./Models/" + i for i in listdir(path="./Models") if "Model" in i]
 
         return self.models if fl_return is True else None
 

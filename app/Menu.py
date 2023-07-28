@@ -26,7 +26,7 @@ class Menu:
         self.cord_res = [(452, i * 40 + 20) for i in range(1, 11)]
 
     def menu_borden(self, model_name: str, models: Model, step):
-
+        model_name = model_name.split("/")[-1]
         self.act_model = (
             self.f2.render(model_name, True, (50, 50, 50)),
             model_name,
@@ -35,7 +35,7 @@ class Menu:
 
         self.text_models = [
             (
-                self.f2.render(mod, True, (100, 100, 100)),
+                self.f2.render(mod.split("/")[-1], True, (100, 100, 100)),
                 mod,
                 (448 // 6, step * num)
             )
@@ -74,7 +74,8 @@ class Menu:
         if text_models:
             """
             x,y = x,y 
-            x2,y2 = x + len()* 18,y + 38"""
+            x2,y2 = x + len()* 18,y + 38
+            """
             for mod, name, (x, y) in self.text_models:
                 self.sc.blit(mod, (x, y))
 
@@ -109,9 +110,10 @@ class Menu:
         Логика если мы находимя в меню и выбираем что-то из меню
         """
         for name, (x1, y1), (x2, y2) in self.borders:
+            name_t = name.split("/")[-1]
             if x1 <= x <= x2 and y1 <= y <= y2 and draw:
                 self.act_model = (
-                    self.f2.render(name, True, (50, 50, 50)),
+                    self.f2.render(name_t, True, (50, 50, 50)),
                     name,
                     (0, 0))
                 self.update(activate_model=True)
